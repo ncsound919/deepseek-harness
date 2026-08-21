@@ -1,0 +1,15 @@
+{
+  "name": "@deepseek-harness/skill-science",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Scientific-computing skill plugin for DeepSeek Harness (dsh): units, constants, statistics, and literature-search tools.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "keywords": ["dsh", "deepseek-harness", "skill", "science", "plugin"],
+  "license": "MIT"
+}
