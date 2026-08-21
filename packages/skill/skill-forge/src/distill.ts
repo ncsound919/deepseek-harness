@@ -21,7 +21,7 @@ export interface DistilledSkill {
   toolChain: string[]
 }
 
-const SKILL_NAME_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+export const SKILL_NAME_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 export function parseForgeEvents(jsonl: string): ForgeEvent[] {
   const events: ForgeEvent[] = []

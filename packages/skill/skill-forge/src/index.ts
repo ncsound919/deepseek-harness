@@ -1,6 +1,7 @@
 import type { Context } from '@deepseek-ai/cordis'
 import { defineTool } from '@deepseek-ai/dsh-tools'
 
+import { commitSkill, type FsWriteLike } from './commit.js'
 import { distillSkill, parseForgeEvents } from './distill.js'
 import { JsonTelemetryStorage, PersistentTelemetryStore } from './persistence.js'
 import { TelemetryStore } from './telemetry.js'
@@ -8,6 +9,7 @@ import { TelemetryStore } from './telemetry.js'
 export * from './distill.js'
 export * from './telemetry.js'
 export * from './persistence.js'
+export * from './commit.js'
 
 export const name = 'skill-forge'
 export const inject = ['tools']
@@ -47,6 +49,40 @@ export function apply(ctx: Context, config?: ForgeConfig): void {
         const distilled = distillSkill(parseForgeEvents(trajectoryJsonl), { name, description })
         telemetry.register(name)
         return Promise.resolve(distilled)
+      },
+    }),
+  )
+
+  ctx.tools.register(
+    defineTool({
+      name: 'forge_commit',
+      description:
+        'Write a candidate SKILL.md into the workspace .agents/skills/ tree through the host fs service, behind the fs/write-intent policy gate. Pair with forge_distill: distill the verified trajectory, review, then commit.',
+      parameters: {
+        name: { type: 'string', required: true, description: 'Kebab-case skill name (becomes the directory under the skills root)' },
+        content: { type: 'string', required: true, description: 'Full SKILL.md content, typically reviewed output from forge_distill' },
+        skillsDir: { type: 'string', required: false, description: 'Skills root override (default: .agents/skills)' },
+      },
+      output: JSON_TEXT_OUTPUT,
+      async execute({ name, content, skillsDir }, exec) {
+        // Defensive lookup instead of a hard inject so the plugin still
+        // activates in compositions without an fs provider mounted.
+        const fs = (ctx as unknown as { fs?: FsWriteLike }).fs
+        if (!fs) {
+          throw new Error(
+            'forge_commit requires the fs service; mount an fs provider (fs-local or fs-sandbox) in this composition',
+          )
+        }
+        const result = await commitSkill(
+          fs,
+          (event, target, actor, fallback) => ctx.waterfall(event, target, actor, fallback),
+          exec,
+          name,
+          content,
+          skillsDir,
+        )
+        telemetry.register(name)
+        return result
       },
     }),
   )
