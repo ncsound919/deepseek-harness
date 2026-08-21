@@ -1,0 +1,9 @@
+# Rewind Mode agent composition layer for DeepSeek Harness (Cordis)
+# Time-travel debugging: load trajectories, fork counterfactual timelines, diff branches,
+# and distill verified winning branches into reusable skills via the forge.
+
+- id: tool-rewind
+  name: '@deepseek-ai/dsh-tool-rewind'
+
+- id: skill-forge
+  name: '@deepseek-ai/dsh-skill-forge'

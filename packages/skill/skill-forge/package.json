@@ -1,0 +1,28 @@
+{
+  "name": "@deepseek-ai/dsh-skill-forge",
+  "version": "0.1.1-rc.1",
+  "description": "Self-improving skills for DeepSeek Harness: distill verified successful trajectories into candidate SKILL.md files, track skill telemetry, and promote or deprecate skills by measured success rate",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis": "workspace:^",
+    "@deepseek-ai/dsh-skill": "workspace:^",
+    "@deepseek-ai/dsh-tools": "workspace:^"
+  },
+  "keywords": [
+    "cordis",
+    "cordis-plugin",
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "skills",
+    "self-improving",
+    "telemetry"
+  ],
+  "license": "MIT"
+}

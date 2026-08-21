@@ -1,0 +1,3 @@
+name: 回溯模式 (Rewind Mode)
+description: 时间旅行调试 Agent 模式：加载会话轨迹、在任意工具调用处分叉反事实时间线、并对分支进行差异分析。
+order: 6

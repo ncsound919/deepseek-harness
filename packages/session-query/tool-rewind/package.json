@@ -1,0 +1,27 @@
+{
+  "name": "@deepseek-ai/dsh-tool-rewind",
+  "version": "0.1.1-rc.1",
+  "description": "Time-travel debugging and counterfactual replay for DeepSeek Harness agent sessions: load trajectories, fork timelines at any tool call, and diff counterfactual branches",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@deepseek-ai/cordis": "workspace:^",
+    "@deepseek-ai/dsh-tools": "workspace:^"
+  },
+  "keywords": [
+    "cordis",
+    "cordis-plugin",
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "time-travel",
+    "replay",
+    "debugging"
+  ],
+  "license": "MIT"
+}

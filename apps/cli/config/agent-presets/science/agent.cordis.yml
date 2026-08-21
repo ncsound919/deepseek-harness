@@ -4,6 +4,12 @@
 - id: skill-science
   name: '@deepseek-ai/dsh-skill-science'
 
+- id: tool-rewind
+  name: '@deepseek-ai/dsh-tool-rewind'
+
+- id: skill-forge
+  name: '@deepseek-ai/dsh-skill-forge'
+
 - id: mcp-pubmed
   name: '@deepseek-ai/dsh-mcp-client'
   config:
