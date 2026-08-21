@@ -1,12 +1,3 @@
-/**
- * Literature-search tool plugin: queries arXiv's public Atom API for scientific papers.
- * Tip #2 / Tip #5: register domain-specific data-source tools rather than relying on
- * generic web search, and prefer MCP/HTTP integrations over hand-rolled scraping where possible.
- *
- * This module has no external dependencies beyond the global fetch API, so it works
- * inside dsh's sandboxed tool-execution environment.
- */
-
 export interface ArxivResult {
   id: string;
   title: string;
@@ -30,15 +21,15 @@ export async function searchArxiv(query: string, maxResults = 5): Promise<ArxivR
 
 export function parseArxivFeed(xml: string): ArxivResult[] {
   const entries: ArxivResult[] = [];
-  const entryRegex = /<entry>([\s\S]*?)<\/entry>/g;
+  const entryRegex = /<entry>([\\s\\S]*?)<\\/entry>/g;
   let match: RegExpExecArray | null;
   while ((match = entryRegex.exec(xml)) !== null) {
     const block = match[1];
-    const id = /<id>(.*?)<\/id>/.exec(block)?.[1] ?? "";
-    const title = /<title>([\s\S]*?)<\/title>/.exec(block)?.[1]?.trim().replace(/\s+/g, " ") ?? "";
-    const summary = /<summary>([\s\S]*?)<\/summary>/.exec(block)?.[1]?.trim().replace(/\s+/g, " ") ?? "";
-    const published = /<published>(.*?)<\/published>/.exec(block)?.[1] ?? "";
-    const authors = [...block.matchAll(/<name>(.*?)<\/name>/g)].map((m) => m[1]);
+    const id = /<id>(.*?)<\\/id>/.exec(block)?.[1] ?? "";
+    const title = /<title>([\\s\\S]*?)<\\/title>/.exec(block)?.[1]?.trim().replace(/\\s+/g, " ") ?? "";
+    const summary = /<summary>([\\s\\S]*?)<\\/summary>/.exec(block)?.[1]?.trim().replace(/\\s+/g, " ") ?? "";
+    const published = /<published>(.*?)<\\/published>/.exec(block)?.[1] ?? "";
+    const authors = [...block.matchAll(/<name>(.*?)<\\/name>/g)].map((m) => m[1]);
     entries.push({ id, title, summary, authors, published, link: id });
   }
   return entries;

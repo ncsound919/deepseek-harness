@@ -1,8 +1,3 @@
-/**
- * Unit conversion helpers for scientific work (SI-first, common non-SI units included).
- * Tip #1: register domain tool plugins (unit conversion is one of the most requested).
- */
-
 export type UnitCategory = "length" | "mass" | "energy" | "temperature" | "pressure" | "amount";
 
 const LENGTH_TO_METER: Record<string, number> = {

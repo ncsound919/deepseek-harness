@@ -1,8 +1,3 @@
-/**
- * Physical and chemical constants lookup (CODATA 2018 values).
- * Tip #1 / Tip #4: expose reference data as a tool so the model does not hallucinate constants.
- */
-
 export interface PhysicalConstant {
   symbol: string;
   name: string;

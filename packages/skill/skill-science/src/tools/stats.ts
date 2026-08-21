@@ -1,9 +1,3 @@
-/**
- * Lightweight statistics helpers for quick data-analysis sanity checks.
- * Tip #3 / Tip #6: give the agent verifiable compute primitives instead of asking the
- * LLM to do arithmetic/statistics purely by generation.
- */
-
 export function mean(values: number[]): number {
   if (values.length === 0) throw new Error("mean: empty array");
   return values.reduce((a, b) => a + b, 0) / values.length;
@@ -14,6 +8,27 @@ export function stddev(values: number[], sample = true): number {
   const m = mean(values);
   const variance = values.reduce((acc, v) => acc + (v - m) ** 2, 0) / (values.length - (sample ? 1 : 0));
   return Math.sqrt(variance);
+}
+
+export function summary(values: number[]): {
+  count: number;
+  mean: number;
+  stddev: number;
+  min: number;
+  max: number;
+  variance: number;
+} {
+  if (values.length === 0) throw new Error("summary: empty array");
+  const m = mean(values);
+  const sd = values.length >= 2 ? stddev(values) : 0;
+  return {
+    count: values.length,
+    mean: m,
+    stddev: sd,
+    min: Math.min(...values),
+    max: Math.max(...values),
+    variance: sd * sd,
+  };
 }
 
 export function linearRegression(x: number[], y: number[]): { slope: number; intercept: number; r2: number } {

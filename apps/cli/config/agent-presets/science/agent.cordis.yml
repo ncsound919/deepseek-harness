@@ -1,0 +1,20 @@
+# Science Mode agent composition layer for DeepSeek Harness (Cordis)
+# Extends standard capability set with domain scientific tooling, literature search, and safe computation
+
+- id: skill-science
+  name: '@deepseek-ai/dsh-skill-science'
+
+- id: mcp-pubmed
+  name: '@deepseek-ai/dsh-mcp-client'
+  config:
+    command: 'npx'
+    args: ['-y', '@modelcontextprotocol/server-pubmed']
+
+- id: subagent-science-verifier
+  name: '@deepseek-ai/dsh-subagent'
+  config:
+    agentName: 'science-verifier'
+    systemPrompt: |
+      You are the scientific calculation and hypothesis verification sub-agent.
+      Ensure all equations maintain dimensional consistency, physical constants match CODATA standards,
+      and statistical inferences are reproducible.
