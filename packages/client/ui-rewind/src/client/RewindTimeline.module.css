@@ -1,0 +1,88 @@
+.root {
+  background: var(--dsw-alias-bg-layer-2);
+  color: var(--dsw-alias-label-primary);
+  border-radius: 8px;
+  padding: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.header {
+  color: var(--ecosystem-accent, #ffd400);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.tree {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rootDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dsw-alias-label-primary);
+  flex: none;
+}
+
+.forkDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--ecosystem-accent, #ffd400);
+  transform: rotate(45deg);
+  flex: none;
+}
+
+.id {
+  color: var(--dsw-alias-label-primary);
+  font-weight: 600;
+}
+
+.forkBadge {
+  background: var(--ecosystem-accent, #ffd400);
+  color: #0a1628;
+  border-radius: 4px;
+  padding: 0 6px;
+  font-weight: 600;
+}
+
+.muted {
+  color: var(--dsw-alias-label-tertiary);
+}
+
+.card {
+  background: var(--dsw-alias-bg-layer-3);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.cardTitle {
+  color: var(--dsw-alias-label-secondary);
+  margin-bottom: 6px;
+}
+
+.cardBody {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fallback {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--dsw-alias-label-secondary);
+}

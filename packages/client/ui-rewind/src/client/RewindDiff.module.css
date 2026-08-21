@@ -1,0 +1,74 @@
+.root {
+  background: var(--dsw-alias-bg-layer-2);
+  color: var(--dsw-alias-label-primary);
+  border-radius: 8px;
+  padding: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.header {
+  color: var(--ecosystem-accent, #ffd400);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.summary {
+  color: var(--dsw-alias-label-secondary);
+  margin-bottom: 10px;
+}
+
+.barTrack {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--dsw-alias-bg-layer-3);
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.barShared {
+  height: 100%;
+  background: var(--ecosystem-accent, #ffd400);
+}
+
+.muted {
+  color: var(--dsw-alias-label-tertiary);
+  margin-bottom: 10px;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.divergentRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  background: var(--dsw-alias-bg-layer-3);
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+
+.step {
+  color: var(--ecosystem-accent, #ffd400);
+  font-weight: 600;
+  flex: none;
+}
+
+.side {
+  color: var(--dsw-alias-label-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 40%;
+}
+
+.vs {
+  color: var(--dsw-alias-label-tertiary);
+  flex: none;
+}
