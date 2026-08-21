@@ -3,11 +3,13 @@ import { defineTool } from '@deepseek-ai/dsh-tools'
 
 import { diffTimelines } from './diff.js'
 import { JsonTimelineStorage, PersistentTimelineStore } from './persistence.js'
+import { extractEvents, normalizeSessionEvents, type SessionQueryLike } from './session-bridge.js'
 import { parseTrajectoryJsonl, TimelineStore } from './trajectory.js'
 
 export * from './trajectory.js'
 export * from './diff.js'
 export * from './persistence.js'
+export * from './session-bridge.js'
 
 export const name = 'tool-rewind'
 export const inject = ['tools']
@@ -31,6 +33,37 @@ export function apply(ctx: Context, config?: RewindConfig): void {
   if (store instanceof PersistentTimelineStore) {
     void store.hydrate()
   }
+
+  ctx.tools.register(
+    defineTool({
+      name: 'rewind_load_session',
+      description:
+        'Load a live or persisted dsh session directly from the sessionQuery service into a root timeline, with no manual JSONL export. Find session ids with the session_search tool first.',
+      parameters: {
+        sessionId: { type: 'string', required: true, description: 'Exact session id to load as a timeline' },
+        timelineId: { type: 'string', required: false, description: 'Optional explicit id for the root timeline' },
+      },
+      output: JSON_TEXT_OUTPUT,
+      async execute({ sessionId, timelineId }) {
+        // Defensive lookup instead of a hard inject so the plugin still
+        // activates in compositions without a SessionQueryEngine backend.
+        const sessionQuery = (ctx as unknown as { sessionQuery?: SessionQueryLike }).sessionQuery
+        if (!sessionQuery) {
+          throw new Error(
+            'rewind_load_session requires the sessionQuery service; mount a SessionQueryEngine backend (e.g. session-query-sqlite) in this composition',
+          )
+        }
+        const records = await sessionQuery.filterSessions([{ kind: 'id', values: [sessionId] }])
+        const session = Array.isArray(records) ? records[0] : records
+        if (!session) {
+          throw new Error(`Session not found or not authorized: ${sessionId}`)
+        }
+        const events = normalizeSessionEvents(extractEvents(session))
+        const timeline = store.load(events, timelineId)
+        return { timelineId: timeline.id, eventCount: timeline.events.length, sourceSession: sessionId }
+      },
+    }),
+  )
 
   ctx.tools.register(
     defineTool({
