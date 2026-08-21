@@ -128,6 +128,15 @@ export class TimelineStore {
     }))
   }
 
+  /** Restore a previously persisted timeline, keeping id allocation collision-free. */
+  restore(timeline: Timeline): void {
+    this.timelines.set(timeline.id, timeline)
+    const suffix = Number(timeline.id.split('-').pop())
+    if (Number.isFinite(suffix) && suffix > this.counter) {
+      this.counter = suffix
+    }
+  }
+
   private nextId(prefix: string): string {
     this.counter += 1
     return `${prefix}-${this.counter}`

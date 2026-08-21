@@ -68,6 +68,13 @@ export class TelemetryStore {
       .sort((a, b) => b.successRate - a.successRate || b.invocations - a.invocations)
   }
 
+  /** Restore previously persisted records without altering their lifecycle state. */
+  restore(records: SkillTelemetry[]): void {
+    for (const record of records) {
+      this.records.set(record.name, { ...record })
+    }
+  }
+
   private setStatus(name: string, status: SkillStatus): SkillTelemetry {
     const record = this.records.get(name)
     if (!record) throw new Error(`Unknown skill: ${name}`)

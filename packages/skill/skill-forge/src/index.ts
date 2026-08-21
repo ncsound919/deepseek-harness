@@ -2,13 +2,20 @@ import type { Context } from '@deepseek-ai/cordis'
 import { defineTool } from '@deepseek-ai/dsh-tools'
 
 import { distillSkill, parseForgeEvents } from './distill.js'
+import { JsonTelemetryStorage, PersistentTelemetryStore } from './persistence.js'
 import { TelemetryStore } from './telemetry.js'
 
 export * from './distill.js'
 export * from './telemetry.js'
+export * from './persistence.js'
 
 export const name = 'skill-forge'
 export const inject = ['tools']
+
+export interface ForgeConfig {
+  /** Directory where skill telemetry persists as telemetry.json. Omit for in-memory only. */
+  persistenceDir?: string
+}
 
 const JSON_TEXT_OUTPUT = {
   schema: { type: 'object' as const, additionalProperties: true },
@@ -17,9 +24,14 @@ const JSON_TEXT_OUTPUT = {
   ],
 }
 
-const telemetry = new TelemetryStore()
+export function apply(ctx: Context, config?: ForgeConfig): void {
+  const telemetry = config?.persistenceDir
+    ? new PersistentTelemetryStore(new JsonTelemetryStorage(config.persistenceDir))
+    : new TelemetryStore()
+  if (telemetry instanceof PersistentTelemetryStore) {
+    void telemetry.hydrate()
+  }
 
-export function apply(ctx: Context): void {
   ctx.tools.register(
     defineTool({
       name: 'forge_distill',

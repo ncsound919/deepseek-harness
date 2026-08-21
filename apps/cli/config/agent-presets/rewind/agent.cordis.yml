@@ -1,9 +1,14 @@
 # Rewind Mode agent composition layer for DeepSeek Harness (Cordis)
 # Time-travel debugging: load trajectories, fork counterfactual timelines, diff branches,
 # and distill verified winning branches into reusable skills via the forge.
+# Both stores persist next to this preset so timelines and rankings survive restarts.
 
 - id: tool-rewind
   name: '@deepseek-ai/dsh-tool-rewind'
+  config:
+    persistenceDir: !!js "process.getBuiltinModule('node:url').fileURLToPath(new URL('timelines/', baseUrl))"
 
 - id: skill-forge
   name: '@deepseek-ai/dsh-skill-forge'
+  config:
+    persistenceDir: !!js "process.getBuiltinModule('node:url').fileURLToPath(new URL('telemetry/', baseUrl))"

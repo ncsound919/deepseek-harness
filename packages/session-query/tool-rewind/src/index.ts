@@ -2,13 +2,20 @@ import type { Context } from '@deepseek-ai/cordis'
 import { defineTool } from '@deepseek-ai/dsh-tools'
 
 import { diffTimelines } from './diff.js'
+import { JsonTimelineStorage, PersistentTimelineStore } from './persistence.js'
 import { parseTrajectoryJsonl, TimelineStore } from './trajectory.js'
 
 export * from './trajectory.js'
 export * from './diff.js'
+export * from './persistence.js'
 
 export const name = 'tool-rewind'
 export const inject = ['tools']
+
+export interface RewindConfig {
+  /** Directory where timelines persist as JSON documents. Omit for in-memory only. */
+  persistenceDir?: string
+}
 
 const JSON_TEXT_OUTPUT = {
   schema: { type: 'object' as const, additionalProperties: true },
@@ -17,9 +24,14 @@ const JSON_TEXT_OUTPUT = {
   ],
 }
 
-const store = new TimelineStore()
+export function apply(ctx: Context, config?: RewindConfig): void {
+  const store = config?.persistenceDir
+    ? new PersistentTimelineStore(new JsonTimelineStorage(config.persistenceDir))
+    : new TimelineStore()
+  if (store instanceof PersistentTimelineStore) {
+    void store.hydrate()
+  }
 
-export function apply(ctx: Context): void {
   ctx.tools.register(
     defineTool({
       name: 'rewind_load_trajectory',
